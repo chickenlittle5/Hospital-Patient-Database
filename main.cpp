@@ -6,7 +6,7 @@ int main() {
 
     cout << "Hello World" << endl;
     cout << "ryan is gay" << endl;
-    cout << "Who thinks ryan should get a low taper fade?" << endl;
+    cout << "ben is gay" << endl;
     bool agree = true;
     cout << agree;
 
