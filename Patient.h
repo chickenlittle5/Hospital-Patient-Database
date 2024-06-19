@@ -43,7 +43,7 @@ public:
         return _id == other.getName();
     }
 
-    friend int hashFunction(string key, int hashSize);
+    friend int hashFunction(const string key, int hashSize);
 
 };
 
