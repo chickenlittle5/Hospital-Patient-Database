@@ -4,11 +4,16 @@ using namespace std;
 
 int main() {
 
-    cout << "Hello World" << endl;
-    cout << "ryan is gay" << endl;
-    cout << "ben is gay" << endl;
-    bool agree = true;
-    cout << agree;
 
     return 0;
+}
+
+void displayIntro() {
+    cout << "=======================================================================" << endl;
+    cout << "Welcome to the In-Patient Hospital Database System!" << endl;
+    cout << "=======================================================================" << endl;
+    cout << "The purpose of this application is to organize patients for easy access" << endl 
+         << "to prevent confusion and inefficiency in crucial times. In other times " << endl
+         << "just for the convenience and quick to find patients without much effort."<< endl;
+
 }
