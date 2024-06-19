@@ -21,8 +21,14 @@ public:
 private:
 	// internal insert node: insert newNode in nodePtr subtree
 	BinaryNode<ItemType>* _insert(BinaryNode<ItemType>* nodePtr, BinaryNode<ItemType>* newNode);
-   
-	// search for target node
+    
+    BinaryNode<ItemType>* _remove(BinaryNode<ItemType>* nodePtr, const ItemType &target, bool &success);
+
+    BinaryNode<ItemType>* _removeNode(BinaryNode<ItemType> *nodePtr);
+
+    BinaryNode<ItemType>* _removeLeftmostNode(BinaryNode<ItemType> *nodePtr, ItemType &inorderSuccessor);
+
+    // search for target node
 	BinaryNode<ItemType>* _search(BinaryNode<ItemType>* treePtr, const ItemType &target) const;
 };
 
@@ -37,6 +43,16 @@ bool BinarySearchTree<ItemType>::insert(const ItemType & newEntry)
 	
 	return true;
 }  
+
+template<class ItemType>
+bool BinarySearchTree<ItemType>::remove(const ItemType &item) {
+    bool success = false;
+    this->rootPtr = _remove(this->rootPtr, item, success);
+    if (success) {
+        this->count--;
+    }
+    return success;
+}
 
 // Wrapper for _search
 // - it calls the private _search function that returns a Node pointer or NULL
@@ -54,9 +70,7 @@ bool BinarySearchTree<ItemType>::search(const ItemType& anEntry, ItemType & retu
     return false;
 }
 
-//////////////////////////// private functions ////////////////////////////////////////////
-
-// Iterative implementation of the insert operation (TO DO: change it to a recursive function!)
+// Iterative implementation of the insert operation
 template<class ItemType>
 BinaryNode<ItemType>* BinarySearchTree<ItemType>::_insert(BinaryNode<ItemType>* nodePtr,
                                                           BinaryNode<ItemType>* newNodePtr)
@@ -79,6 +93,56 @@ BinaryNode<ItemType>* BinarySearchTree<ItemType>::_insert(BinaryNode<ItemType>* 
     }
 
     return nodePtr;
+}
+
+template<class ItemType>
+BinaryNode<ItemType>* BinarySearchTree<ItemType>::_remove(BinaryNode<ItemType>* nodePtr, const ItemType &target, bool &success) {
+    if (nodePtr == nullptr) {
+        success = false;
+        return nodePtr;
+    }
+
+    if (target < nodePtr->getItem()) {
+        nodePtr->setLeftPtr(_remove(nodePtr->getLeftPtr(), target, success));
+    } else if (target > nodePtr->getItem()) {
+        nodePtr->setRightPtr(_remove(nodePtr->getRightPtr(), target, success));
+    } else {
+        nodePtr = _removeNode(nodePtr);
+        success = true;
+    }
+    return nodePtr;
+}
+
+template<class ItemType>
+BinaryNode<ItemType>* BinarySearchTree<ItemType>::_removeNode(BinaryNode<ItemType>* nodePtr) {
+    if (nodePtr->isLeaf()) {
+        delete nodePtr;
+        return nullptr;
+    } else if (nodePtr->getLeftPtr() == nullptr) {
+        BinaryNode<ItemType>* nodeToConnectPtr = nodePtr->getRightPtr();
+        delete nodePtr;
+        return nodeToConnectPtr;
+    } else if (nodePtr->getRightPtr() == nullptr) {
+        BinaryNode<ItemType>* nodeToConnectPtr = nodePtr->getLeftPtr();
+        delete nodePtr;
+        return nodeToConnectPtr;
+    } else {
+        ItemType newNodeValue;
+        nodePtr->setRightPtr(_removeLeftmostNode(nodePtr->getRightPtr(), newNodeValue));
+        nodePtr->setItem(newNodeValue);
+        return nodePtr;
+    }
+}
+
+template<class ItemType>
+BinaryNode<ItemType>* BinarySearchTree<ItemType>::_removeLeftmostNode(BinaryNode<ItemType>* nodePtr, ItemType &inorderSuccessor) {
+    if (nodePtr->getLeftPtr() == nullptr) {
+        inorderSuccessor = nodePtr->getItem();
+        return _removeNode(nodePtr);
+    } else {
+        nodePtr->setLeftPtr(_removeLeftmostNode(nodePtr->getLeftPtr(), inorderSuccessor));
+        return nodePtr;
+    }
 }
 
 // Recursive implementation of the search operation
