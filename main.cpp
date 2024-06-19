@@ -1,12 +1,26 @@
 #include <iostream>
+#include <ifstream>
+#include <sstream>
 #include <string>
 using namespace std;
 
 void displayIntro();
 void displayMenu();
+void addNewPatientManually();
+void addNewPatientsFromFile();
+void deletePatient();
+void undoDeletePatient();
+void searchWithPatientID();
+void listAllPatientsSortedByID();
+void saveAllPatientsToFile();
+void showDatabaseStatistics();
+void menuManager();
 
 int main() {
+    int userChoice;
+    string patID, patName, patDoB, patAddy, patDiag;
     displayIntro();
+    menuManager();
 
     return 0;
 }
@@ -34,11 +48,41 @@ void displayMenu() {
 void addNewPatientManually() {
     cout << "Adding a new patient manually..." << endl;
     // Add your code here
+    cout << "Enter Patient ID: \n";
+    cin >> patID;
+    cout << "Enter Patient Full Name: \n";
+    cin >> patName;
+    cout << "Enter Patient Date of Birth (XX/XX/XXXX) \n";
+    cin >> patDoB;
+    cout << "Enter Patient Address \n";
+    cin >> patAddy;
+    cout << "Enter Patient Diagnosis \n";
+    cin >> patDiag;
 }
 
 void addNewPatientsFromFile() {
     cout << "Adding new patient(s) from input file..." << endl;
     // Add your code here
+    cout << "Enter the filename: ";
+    ifstream inputFile(filename);
+    cout << "Reading data from \"" << filename << "\"" << endl;
+    if(!inputFile){
+        cout << "Error opening the input file: \""<< filename << "\"" << endl;
+        exit(EXIT_FAILURE);
+    }
+    string line;
+    while (getline(inputFile, line)){
+    stringstream temp(line);   // create temp with data from line
+    getline(temp, patID, ';');   // stop reading name at ';'
+    temp.ignore();  // to ignore space in front of description
+    getline(temp, patName, ';');  
+    temp.ignore();  
+    getline(temp, patAddy, ';');  
+    temp.ignore();  
+    getline(temp, patDoB, ';');  
+    temp.ignore();  
+    temp >> patDiag;
+    }
 }
 
 void deletePatient() {
