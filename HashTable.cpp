@@ -1,3 +1,0 @@
-/*
- * @author - Ethan Tran
- */
