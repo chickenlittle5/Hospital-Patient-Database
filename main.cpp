@@ -52,7 +52,7 @@ void addNewPatientManually() {
     cin >> patID;
     cout << "Enter Patient Full Name: \n";
     cin >> patName;
-    cout << "Enter Patient Date of Birth (XX/XX/XXXX) \n";
+    cout << "Enter Patient Date of Birth (MM/DD/YYYY) \n";
     cin >> patDoB;
     cout << "Enter Patient Address \n";
     cin >> patAddy;
