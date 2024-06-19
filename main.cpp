@@ -2,8 +2,10 @@
 #include <string>
 using namespace std;
 
-int main() {
+void displayIntro();
 
+int main() {
+    displayIntro();
 
     return 0;
 }
