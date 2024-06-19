@@ -5,6 +5,9 @@
 #include <string>
 using std::string;
 
+
+int hashFunction(string key, int hashSize);
+
 class Patient {
 
 private:
@@ -39,6 +42,8 @@ public:
     bool operator==(const Patient& other) {
         return _id == other.getName();
     }
+
+    friend int hashFunction(string key, int hashSize);
 
 };
 
