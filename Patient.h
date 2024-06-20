@@ -3,10 +3,15 @@
 #define PATIENT_H
 
 #include <string>
+#include <iostream>
 using std::string;
+using std::ostream;
+using std::cout;
+using std::endl;
 
+class Patient;
 
-int hashFunction(string key, int hashSize);
+int hashFunction(const Patient& key, int hashSize);
 
 class Patient {
 
@@ -43,7 +48,17 @@ public:
         return _id == other.getName();
     }
 
-    friend int hashFunction(const string key, int hashSize);
+    friend ostream& operator<<(ostream&, Patient& p) {
+        cout << "ID: " << p.getID() << endl;
+        cout << "Name: " << p.getName() << endl;
+        cout << "Address: " << p.getAddress() << endl;
+        cout << "Date of Birth: " << p.getDoB() << endl;
+        cout << "Condition: " << p.getCondition() << endl;
+
+        return cout;
+    }
+
+    friend int hashFunction(const Patient& key, int hashSize);
 
 };
 

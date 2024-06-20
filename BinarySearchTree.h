@@ -17,11 +17,11 @@ public:
     bool remove(const ItemType &item);
     // find a target node
     bool search(const ItemType &target, ItemType &returnedItem) const;
-    
+
 private:
-	// internal insert node: insert newNode in nodePtr subtree
-	BinaryNode<ItemType>* _insert(BinaryNode<ItemType>* nodePtr, BinaryNode<ItemType>* newNode);
-    
+  // internal insert node: insert newNode in nodePtr subtree
+  BinaryNode<ItemType>* _insert(BinaryNode<ItemType>* nodePtr, BinaryNode<ItemType>* newNode);
+
     BinaryNode<ItemType>* _remove(BinaryNode<ItemType>* nodePtr, const ItemType &target, bool &success);
 
     BinaryNode<ItemType>* _removeNode(BinaryNode<ItemType> *nodePtr);
@@ -29,19 +29,19 @@ private:
     BinaryNode<ItemType>* _removeLeftmostNode(BinaryNode<ItemType> *nodePtr, ItemType &inorderSuccessor);
 
     // search for target node
-	BinaryNode<ItemType>* _search(BinaryNode<ItemType>* treePtr, const ItemType &target) const;
+  BinaryNode<ItemType>* _search(BinaryNode<ItemType>* treePtr, const ItemType &target) const;
 };
 
 // Wrapper for _insert - Inserting items within a tree
 template<class ItemType>
 bool BinarySearchTree<ItemType>::insert(const ItemType & newEntry)
 {
-	BinaryNode<ItemType>* newNodePtr = new BinaryNode<ItemType>(newEntry);
-	
-	this->rootPtr = _insert(this->rootPtr, newNodePtr);
-	this->count++;
-	
-	return true;
+  BinaryNode<ItemType>* newNodePtr = new BinaryNode<ItemType>(newEntry);
+
+  this->rootPtr = _insert(this->rootPtr, newNodePtr);
+  this->count++;
+
+  return true;
 }  
 
 template<class ItemType>
@@ -72,8 +72,7 @@ bool BinarySearchTree<ItemType>::search(const ItemType& anEntry, ItemType & retu
 
 // Iterative implementation of the insert operation
 template<class ItemType>
-BinaryNode<ItemType>* BinarySearchTree<ItemType>::_insert(BinaryNode<ItemType>* nodePtr,
-                                                          BinaryNode<ItemType>* newNodePtr)
+BinaryNode<ItemType>* BinarySearchTree<ItemType>::_insert(BinaryNode<ItemType>* nodePtr, BinaryNode<ItemType>* newNodePtr)
 { 
     if(!nodePtr) // == NULL
     {
@@ -153,11 +152,11 @@ BinaryNode<ItemType>* BinarySearchTree<ItemType>::_search(BinaryNode<ItemType>* 
                                                            const ItemType &target) const
 {
     BinaryNode<ItemType>* found = nullptr;
-    
+
     if (nodePtr == nullptr) {
        return found;
     }
-    
+
     if (nodePtr->getItem() == target) {
         found = nodePtr;
     } else if (nodePtr->getItem() > target) {
@@ -165,7 +164,7 @@ BinaryNode<ItemType>* BinarySearchTree<ItemType>::_search(BinaryNode<ItemType>* 
     } else {
         found = _search(nodePtr->getRightPtr(), target);
     }
-    
+
     return found;
 }
 

@@ -11,38 +11,39 @@ template<class ItemType>
 class BinaryTree
 {
 protected:
-	BinaryNode<ItemType>* rootPtr;		// ptr to root node
-	int count;						    // number of nodes in tree
+  BinaryNode<ItemType>* rootPtr;		// ptr to root node
+  int count;						    // number of nodes in tree
 
 public:
-	// "admin" functions
- 	BinaryTree() {rootPtr = 0; count = 0;}
-	BinaryTree(const BinaryTree<ItemType> & tree){ }
+  // "admin" functions
+  BinaryTree() {rootPtr = 0; count = 0;}
+  BinaryTree(const BinaryTree<ItemType> & tree){ }
     virtual ~BinaryTree() { destroyTree(rootPtr); }
-   
-	// common functions for all binary trees
- 	bool isEmpty() const	{return count == 0;}
-	int getCount() const {return count;}
-	void clear() {destroyTree(rootPtr); rootPtr = 0; count = 0;}
-	void preOrder(void visit(const ItemType &)) const {_preorder(visit, rootPtr);}
+
+  // common functions for all binary trees
+  bool isEmpty() const	{return count == 0;}
+  int getCount() const {return count;}
+  void clear() {destroyTree(rootPtr); rootPtr = 0; count = 0;}
+  void preOrder(void visit(const ItemType &)) const {_preorder(visit, rootPtr);}
     void inOrder(void visit(const ItemType &)) const  {_inorder(visit, rootPtr);}
-	void postOrder(void visit(const ItemType &)) const{_postorder(visit, rootPtr);}
+  void postOrder(void visit(const ItemType &)) const{_postorder(visit, rootPtr);}
     void printTree(void visit(const ItemType &, int)) const{_printTree(visit, rootPtr, 1);}
     void printInnerNodes(void visit(const ItemType &)) const {_printInnerNodes(visit, rootPtr);}
+    BinaryNode<ItemType>* getRoot() { return rootPtr; }
 
-	// abstract functions to be implemented by derived class
-	virtual bool insert(const ItemType &newData) = 0;
-	//virtual bool remove(const ItemType &data) = 0;
-	virtual bool search(const ItemType &target, ItemType & returnedItem) const = 0;
+  // abstract functions to be implemented by derived class
+  virtual bool insert(const ItemType &newData) = 0;
+  //virtual bool remove(const ItemType &data) = 0;
+  virtual bool search(const ItemType &target, ItemType & returnedItem) const = 0;
 
 private:   
-	// delete all nodes from the tree
-	void destroyTree(BinaryNode<ItemType>* nodePtr);
+  // delete all nodes from the tree
+  void destroyTree(BinaryNode<ItemType>* nodePtr);
 
-	// internal traverse
-	void _preorder(void visit(const ItemType &), BinaryNode<ItemType>* nodePtr) const;
-	void _inorder(void visit(const ItemType &), BinaryNode<ItemType>* nodePtr) const;
-	void _postorder(void visit(const ItemType &), BinaryNode<ItemType>* nodePtr) const;
+  // internal traverse
+  void _preorder(void visit(const ItemType &), BinaryNode<ItemType>* nodePtr) const;
+  void _inorder(void visit(const ItemType &), BinaryNode<ItemType>* nodePtr) const;
+  void _postorder(void visit(const ItemType &), BinaryNode<ItemType>* nodePtr) const;
     void _printTree(void visit(const ItemType &, int), BinaryNode<ItemType>* nodePtr, int level) const;
     void _printInnerNodes(void visit(const ItemType &), BinaryNode<ItemType>* nodePtr) const;
 }; 
