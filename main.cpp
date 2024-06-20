@@ -157,7 +157,7 @@ void addNewPatientsFromFile(HashTable<Patient>& h, BinarySearchTree<string>& bst
       temp.ignore();  
       getline(temp, patDoB, ';');  
       temp.ignore();  
-      temp >> patDiag;
+      getline(temp, patDiag);
   
       Patient newPatient = Patient(patID, patName, patAddy, patDoB, patDiag);
       bst.insert(newPatient.getID());
