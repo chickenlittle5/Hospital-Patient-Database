@@ -118,11 +118,11 @@ void addNewPatientManually(HashTable<Patient>& h, BinarySearchTree<string>& bst)
     cout << "Enter Patient Date of Birth (MM/DD/YYYY): \n";
     cin >> patDoB;
     cout << "Enter Patient Address: \n";
+    cin.ignore(1,'\n');
     getline(cin, patAddy);
-    cin.ignore(1,'\n');
     cout << "Enter Patient Diagnosis: \n";
-    getline(cin, patDiag);
     cin.ignore(1,'\n');
+    getline(cin, patDiag);
   
     Patient newPatient = Patient(patID, patName, patAddy, patDoB, patDiag);
     h.insert(newPatient, hashFunction);
