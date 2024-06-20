@@ -1,29 +1,84 @@
 #include <iostream>
-#include <ifstream>
+#include <fstream>
 #include <sstream>
 #include <string>
+#include "StackADT.h"
+#include "Patient.cpp"
+#include "BinarySearchTree.h"
+#include "HashTable.h"
 using namespace std;
 
 void displayIntro();
 void displayMenu();
-void addNewPatientManually();
-void addNewPatientsFromFile();
-void deletePatient();
-void undoDeletePatient();
-void searchWithPatientID();
+void addNewPatientManually(HashTable<Patient>&, BinarySearchTree<string>&);
+void addNewPatientsFromFile(HashTable<Patient>&, BinarySearchTree<string>&);
+void deletePatient(HashTable<Patient>&, Stack<Patient>&);
+void undoDeletePatient(HashTable<Patient>&, Stack<Patient>&);
+void searchWithPatientID(HashTable<Patient>&);
 void listAllPatientsSortedByID();
-void saveAllPatientsToFile();
+void saveAllPatientsToFile(HashTable<Patient>&);
 void showDatabaseStatistics();
-void menuManager();
+void menuManager(HashTable<Patient>&, BinarySearchTree<string>&, Stack<Patient>&);
+
+// Function to check if a number is prime
+bool isPrime(int n) {
+    if (n<=1) return false;
+
+    // Check for divisors from 2 up to the square root of n
+    for (int i = 2; i * i <= n; ++i) {
+        if (n % i == 0) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// Function to find the next prime number greater than n
+int nextPrime(int n) {
+    while (!isPrime(n)) {
+        n++;
+    }
+    return n;
+}
+
+// Function to count lines in the file and determine the hash table size
+int determineHashSize(const string& filename) {
+    ifstream file(filename);
+    if(!file.is_open()) {
+        cout << "Error opening file: " << filename << endl;
+        return 0;
+    }
+
+    int lines = 0;
+    string line;
+    while (getline(file, line)) {
+        lines++;
+    }
+    file.close();
+    
+    return nextPrime(lines *2);
+}
+
+
+
 
 int main() {
-    int userChoice;
-    string patID, patName, patDoB, patAddy, patDiag;
+    string filename = "test1.txt"; // replace if needed
+    int hashSize = determineHashSize(filename);
+    
+    HashTable<Patient> InfinityCore(hashSize);
+    BinarySearchTree<string> InfCore;
+    Stack<Patient> Bin;
     displayIntro();
-    menuManager();
+    menuManager(InfinityCore, InfCore, Bin);
 
     return 0;
 }
+
+
+
+
 
 void displayIntro() {
     cout << "=======================================================================" << endl;
@@ -34,6 +89,7 @@ void displayIntro() {
          << "just for the convenience and quick to find patients without much effort."<< endl;
 }
 void displayMenu() {
+    cout << "=========== MENU ===========" << endl;
     cout << "[1] - add new patient manually" << endl;
     cout << "[2] - add new patient(s) from input file" << endl;
     cout << "[3] - delete patient" << endl;
@@ -42,12 +98,18 @@ void displayMenu() {
     cout << "[6] - list all patients sorted by ID" << endl;
     cout << "[7] - save all existing patients to file" << endl;
     cout << "[8] - show database statistics" << endl;
-    cout << "[9] - exit application" << endl;
+    cout << "[9] - HELP" << endl;
+    cout << "[0] - exit application" << endl;
+    cout << "===========================" << endl;
+    cout << endl;
 }
-
-void addNewPatientManually() {
-    cout << "Adding a new patient manually..." << endl;
-    // Add your code here
+/*
+Asks user for patient information and adds it to the hash table and binary search tree
+*/
+void addNewPatientManually(HashTable<Patient>& h, BinarySearchTree<string>& bst) {
+    cout << "Adding a new patient manually:" << endl;
+    
+    string patID, patName, patDoB, patAddy, patDiag;
     cout << "Enter Patient ID: \n";
     cin >> patID;
     cout << "Enter Patient Full Name: \n";
@@ -58,12 +120,23 @@ void addNewPatientManually() {
     cin >> patAddy;
     cout << "Enter Patient Diagnosis \n";
     cin >> patDiag;
+  
+    Patient newPatient = Patient(patID, patName, patAddy, patDoB, patDiag);
+    h.insert(newPatient, hashFunction);
+    bst.insert(newPatient.getID());
 }
 
-void addNewPatientsFromFile() {
+/*
+Asks user for file name and adds patients from file to hash table and binary search tree
+*/
+void addNewPatientsFromFile(HashTable<Patient>& h, BinarySearchTree<string>& bst) {
+    string patID, patName, patDoB, patAddy, patDiag;
     cout << "Adding new patient(s) from input file..." << endl;
-    // Add your code here
+    
+    string filename;
     cout << "Enter the filename: ";
+    cin >> filename;
+    
     ifstream inputFile(filename);
     cout << "Reading data from \"" << filename << "\"" << endl;
     if(!inputFile){
@@ -72,87 +145,178 @@ void addNewPatientsFromFile() {
     }
     string line;
     while (getline(inputFile, line)){
-    stringstream temp(line);   // create temp with data from line
-    getline(temp, patID, ';');   // stop reading name at ';'
-    temp.ignore();  // to ignore space in front of description
-    getline(temp, patName, ';');  
-    temp.ignore();  
-    getline(temp, patAddy, ';');  
-    temp.ignore();  
-    getline(temp, patDoB, ';');  
-    temp.ignore();  
-    temp >> patDiag;
+      stringstream temp(line);   // create temp with data from line
+      getline(temp, patID, ';');   // stop reading name at ';'
+      temp.ignore();  // to ignore space in front of description
+      getline(temp, patName, ';');  
+      temp.ignore();  
+      getline(temp, patAddy, ';');  
+      temp.ignore();  
+      getline(temp, patDoB, ';');  
+      temp.ignore();  
+      temp >> patDiag;
+  
+      Patient newPatient = Patient(patID, patName, patAddy, patDoB, patDiag);
+      bst.insert(newPatient.getID());
+      h.insert(newPatient, hashFunction);
     }
 }
 
-void deletePatient() {
+/*
+Asks user for patient ID and deletes patient from hash table and adds removed patient to the trashBin stack in case of an undo delete called
+*/
+void deletePatient(HashTable<Patient>& h, Stack<Patient>& trashBin) {
+    string deletedPatient;
+    cout << "Enter patient to delete: ";
+    cin >> deletedPatient;
     cout << "Deleting a patient..." << endl;
     // Add your code here
+    Patient itemOut;
+    itemOut.setName(deletedPatient);
+    h.remove(itemOut, itemOut, hashFunction);
+    trashBin.push(itemOut);
 }
 
-void undoDeletePatient() {
+/*
+Pops from trash bin stack and inserts back into hash table, popped Patient attributes are then printed using an overloaded stream operator 
+*/
+void undoDeletePatient(HashTable<Patient>& h, Stack<Patient>& trashBin) {
     cout << "Undoing delete patient..." << endl;
     // Add your code here
+    Patient itemOut;
+    itemOut = trashBin.pop();
+    h.insert(itemOut, hashFunction);
+    cout << "Undo-ed patient: " << endl;
+    cout << itemOut;
 }
 
-void searchWithPatientID() {
+/*
+Asks user for patient ID and searches for patient in hash table and prints patient information if found
+*/
+void searchWithPatientID(HashTable<Patient>& h) {
     cout << "Searching with patient ID..." << endl;
+    cout << "Enter the patient ID: " << endl;
+    string patID;
+    cin >> patID;
     // Add your code here
+    Patient itemOut;
+    int numOfCollisions;
+    itemOut.setID(patID);
+    numOfCollisions = h.search(itemOut, itemOut, hashFunction);
+    cout << itemOut;
 }
 
-void listAllPatientsSortedByID() {
+void inorderTraversal(BinaryNode<string>* nodePtr, HashTable<Patient>& h) {
+    if (nodePtr != nullptr) {
+        // Traverse the left subtree
+        inorderTraversal(nodePtr->getLeftPtr(), h);
+
+        // Visit the node
+        string patientID = nodePtr->getItem();
+        Patient patient;
+        patient.setID(patientID);
+        int collisions = h.search(patient, patient, hashFunction);
+        if (collisions >= 0) {
+            cout << patient << endl;
+        }
+
+        // Traverse the right subtree
+        inorderTraversal(nodePtr->getRightPtr(), h);
+    }
+}
+
+void listAllPatientsSortedByID(BinarySearchTree<string>& bst, HashTable<Patient>& h) {
     cout << "Listing all patients sorted by ID..." << endl;
     // Add your code here
+    //while the left->next is null
+    inorderTraversal(bst.getRoot(), h);
 }
 
-void saveAllPatientsToFile() {
+/*
+Saves all patients data into "SavedPatients.txt" file
+*/
+void saveAllPatientsToFile(HashTable<Patient>& h) {
     cout << "Saving all existing patients to file..." << endl;
     // Add your code here
+    ofstream newFile;
+    newFile.open("SavedPatients.txt");
+    if(newFile.is_open()){
+        for(int i = 0; i < h.getSize(); i++){
+            string ID = h.getNode(i).getItem().getID();
+            string name = h.getNode(i).getItem().getName();
+            string address = h.getNode(i).getItem().getAddress();
+            string dob = h.getNode(i).getItem().getDoB();
+            string condition = h.getNode(i).getItem().getCondition();
+            newFile << ID << "; " << name << "; " << address << "; " << dob << "; " << condition << endl;
+        }
+        newFile.close();
+    }
+    else{
+        cout << "Unable to open file" << endl;
+    }
 }
 
-void showDatabaseStatistics() {
+void showDatabaseStatistics(HashTable<Patient>& h) {
     cout << "Showing database statistics..." << endl;
     // Add your code here
+    cout << "Load Factor: " << h.getLoadFactor() << endl;
+    cout << "Size of Hash Table: " << h.getSize() << endl;
+    cout << "Number of Collisions for each patient: " << endl;
+    for(int i = 0; i < h.getSize(); i++) {
+        if(h.getNode(i).getOccupied() == 1) {
+            cout << h.getNode(i).getItem().getName() << " (" << h.getNode(i).getNoCollisions() << ")"<< endl;
+        }
+    }
 }
 
-void menuManager() {
+void printIndentedTree(const string &item, int level) {
+    for (int i = 1; i < level; i++)
+        cout << "..";
+    cout << level << "). " << item << endl;
+}
+
+void menuManager(HashTable<Patient>& h, BinarySearchTree<string>& bst, Stack<Patient>& trash) {
     int choice;
+    displayMenu();
     do {
-        displayMenu();
         cout << "Enter your choice: ";
         cin >> choice;
 
         switch (choice) {
             case 1:
-                addNewPatientManually();
+                addNewPatientManually(h, bst);
                 break;
             case 2:
-                addNewPatientsFromFile();
+                addNewPatientsFromFile(h, bst);
                 break;
             case 3:
-                deletePatient();
+                deletePatient(h, trash);
                 break;
             case 4:
-                undoDeletePatient();
+                undoDeletePatient(h, trash);
                 break;
             case 5:
-                searchWithPatientID();
+                searchWithPatientID(h);
                 break;
             case 6:
-                listAllPatientsSortedByID();
+                listAllPatientsSortedByID(bst, h);
                 break;
             case 7:
-                saveAllPatientsToFile();
+                saveAllPatientsToFile(h);
                 break;
             case 8:
-                showDatabaseStatistics();
+                showDatabaseStatistics(h);
                 break;
             case 9:
-                cout << "Exiting application..." << endl;
+                displayMenu();
                 break;
+            case 69: 
+                bst.printTree(printIndentedTree);
+                break;
+            case 0:
+                cout << "Exiting application. Thank you for using the In-Patient Hospital Database System!" << endl;
             default:
                 cout << "Invalid choice. Please try again." << endl;
         }
-    } while (choice != 9);
+    } while (choice != 0);
 }
-

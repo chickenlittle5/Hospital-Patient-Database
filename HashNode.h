@@ -23,7 +23,7 @@ public:
     void setItem(const ItemType & anItem) {item = anItem;}
     void setOccupied(int ocp) {occupied = ocp;}
     void setNoCollisions(int nCol) {noCollisions = nCol;}
-    
+
     // getters
     ItemType getItem() const {return item;}
     int getOccupied() const {return occupied;}

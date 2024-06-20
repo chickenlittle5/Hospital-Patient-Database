@@ -23,7 +23,7 @@ public:
     void setItem(const ItemType & anItem) {item = anItem;}
     void setLeftPtr(BinaryNode<ItemType>* left) {leftPtr = left;}
     void setRightPtr(BinaryNode<ItemType>* right) {rightPtr = right;}
-    
+
     // Getters
     ItemType getItem() const {return item;}
     BinaryNode<ItemType>* getLeftPtr() const  {return leftPtr;}

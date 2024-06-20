@@ -50,7 +50,7 @@ public:
 */
 template <typename T>
 bool Stack<T>::push(T value) {
-   
+
    StackNode *newNode = new StackNode;
    if (!newNode)
        return false;
@@ -73,14 +73,14 @@ bool Stack<T>::push(T value) {
 */
 template <typename T>
 T Stack<T>::pop() {
-   
+
    StackNode *temp = top;
    T value = temp->value;
    top = top->next;
    delete temp;
    length--;
    return value;
-   
+
 }
 
 
@@ -103,7 +103,7 @@ Stack<T>::~Stack() {
       currNode = currNode->next;
       delete tempNode;
    }
-   
+
 }
 
 
