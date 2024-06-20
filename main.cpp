@@ -1,5 +1,5 @@
 #include <iostream>
-#include <ifstream>
+#include <fstream>
 #include <sstream>
 #include <string>
 using namespace std;
@@ -49,6 +49,7 @@ void addNewPatientManually() {
     string patID, patName, patDoB, patAddy, patDiag;
     cout << "Adding a new patient manually..." << endl;
     // Add your code here
+    string patID, patName, patDoB, patAddy, patDiag;
     cout << "Enter Patient ID: \n";
     cin >> patID;
     cout << "Enter Patient Full Name: \n";
@@ -65,6 +66,7 @@ void addNewPatientsFromFile() {
     string patID, patName, patDoB, patAddy, patDiag;
     cout << "Adding new patient(s) from input file..." << endl;
     // Add your code here
+    string filename;
     cout << "Enter the filename: ";
     ifstream inputFile(filename);
     cout << "Reading data from \"" << filename << "\"" << endl;

@@ -5,6 +5,8 @@
 #ifndef HASHTABLE_H_
 #define HASHTABLE_H_
 
+#include "StackADT.h"
+
 template<class ItemType>
 class HashTable {
 
