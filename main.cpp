@@ -177,8 +177,8 @@ void deletePatient(HashTable<Patient>& h, BinarySearchTree<string>& bst, Stack<P
     Patient itemOut;
     itemOut.setName(deletedPatient);
     h.remove(itemOut, itemOut, hashFunction);
-    trashBin.push(itemOut);
     bst.remove(itemOut.getID());
+    trashBin.push(itemOut);
 }
 
 /*
@@ -247,12 +247,14 @@ void saveAllPatientsToFile(HashTable<Patient>& h) {
     newFile.open("SavedPatients.txt");
     if(newFile.is_open()){
         for(int i = 0; i < h.getSize(); i++){
-            string ID = h.getNode(i).getItem().getID();
-            string name = h.getNode(i).getItem().getName();
-            string address = h.getNode(i).getItem().getAddress();
-            string dob = h.getNode(i).getItem().getDoB();
-            string condition = h.getNode(i).getItem().getCondition();
-            newFile << ID << "; " << name << "; " << address << "; " << dob << "; " << condition << endl;
+            if (h.getNode(i).getOccupied() == 1) {
+                string ID = h.getNode(i).getItem().getID();
+                string name = h.getNode(i).getItem().getName();
+                string address = h.getNode(i).getItem().getAddress();
+                string dob = h.getNode(i).getItem().getDoB();
+                string condition = h.getNode(i).getItem().getCondition();
+                newFile << ID << "; " << name << "; " << address << "; " << dob << "; " << condition << endl;
+            }
         }
         newFile.close();
     }
