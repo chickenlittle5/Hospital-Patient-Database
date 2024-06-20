@@ -112,14 +112,17 @@ void addNewPatientManually(HashTable<Patient>& h, BinarySearchTree<string>& bst)
     string patID, patName, patDoB, patAddy, patDiag;
     cout << "Enter Patient ID: \n";
     cin >> patID;
+    cin.ignore(1,'\n');
     cout << "Enter Patient Full Name: \n";
-    cin >> patName;
-    cout << "Enter Patient Date of Birth (MM/DD/YYYY) \n";
+    getline(cin, patName);
+    cout << "Enter Patient Date of Birth (MM/DD/YYYY): \n";
     cin >> patDoB;
-    cout << "Enter Patient Address \n";
-    cin >> patAddy;
-    cout << "Enter Patient Diagnosis \n";
-    cin >> patDiag;
+    cout << "Enter Patient Address: \n";
+    getline(cin, patAddy);
+    cin.ignore(1,'\n');
+    cout << "Enter Patient Diagnosis: \n";
+    getline(cin, patDiag);
+    cin.ignore(1,'\n');
   
     Patient newPatient = Patient(patID, patName, patAddy, patDoB, patDiag);
     h.insert(newPatient, hashFunction);
@@ -315,8 +318,10 @@ void menuManager(HashTable<Patient>& h, BinarySearchTree<string>& bst, Stack<Pat
                 break;
             case 0:
                 cout << "Exiting application. Thank you for using the In-Patient Hospital Database System!" << endl;
+                break;
             default:
                 cout << "Invalid choice. Please try again." << endl;
+                break;
         }
     } while (choice != 0);
 }
