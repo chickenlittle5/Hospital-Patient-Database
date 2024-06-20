@@ -45,7 +45,7 @@ public:
     string getCondition() const { return _condition; }
 
     bool operator==(const Patient& other) {
-        return _id == other.getName();
+        return _id == other.getID();
     }
 
     friend ostream& operator<<(ostream&, Patient& p) {
