@@ -46,6 +46,7 @@ void displayMenu() {
 }
 
 void addNewPatientManually() {
+    string patID, patName, patDoB, patAddy, patDiag;
     cout << "Adding a new patient manually..." << endl;
     // Add your code here
     cout << "Enter Patient ID: \n";
@@ -61,6 +62,7 @@ void addNewPatientManually() {
 }
 
 void addNewPatientsFromFile() {
+    string patID, patName, patDoB, patAddy, patDiag;
     cout << "Adding new patient(s) from input file..." << endl;
     // Add your code here
     cout << "Enter the filename: ";
