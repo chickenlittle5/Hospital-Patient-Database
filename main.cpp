@@ -112,8 +112,8 @@ void addNewPatientManually(HashTable<Patient>& h, BinarySearchTree<string>& bst)
     string patID, patName, patDoB, patAddy, patDiag;
     cout << "Enter Patient ID: \n";
     cin >> patID;
-    cin.ignore(1,'\n');
     cout << "Enter Patient Full Name: \n";
+    cin.ignore(1,'\n');
     getline(cin, patName);
     cout << "Enter Patient Date of Birth (MM/DD/YYYY): \n";
     cin >> patDoB;
@@ -168,27 +168,29 @@ void addNewPatientsFromFile(HashTable<Patient>& h, BinarySearchTree<string>& bst
 /*
 Asks user for patient ID and deletes patient from hash table and adds removed patient to the trashBin stack in case of an undo delete called
 */
-void deletePatient(HashTable<Patient>& h, Stack<Patient>& trashBin) {
+void deletePatient(HashTable<Patient>& h, BinarySearchTree<string>& bst, Stack<Patient>& trashBin) {
     string deletedPatient;
     cout << "Enter patient to delete: ";
-    cin >> deletedPatient;
+    cin.ignore(1,'\n');
+    getline(cin, deletedPatient);
     cout << "Deleting a patient..." << endl;
-    // Add your code here
     Patient itemOut;
     itemOut.setName(deletedPatient);
     h.remove(itemOut, itemOut, hashFunction);
     trashBin.push(itemOut);
+    bst.remove(itemOut.getID());
 }
 
 /*
 Pops from trash bin stack and inserts back into hash table, popped Patient attributes are then printed using an overloaded stream operator 
 */
-void undoDeletePatient(HashTable<Patient>& h, Stack<Patient>& trashBin) {
+void undoDeletePatient(HashTable<Patient>& h, BinarySearchTree<string>& bst, Stack<Patient>& trashBin) {
     cout << "Undoing delete patient..." << endl;
     // Add your code here
     Patient itemOut;
     itemOut = trashBin.pop();
     h.insert(itemOut, hashFunction);
+    bst.insert(itemOut.getID());
     cout << "Undo-ed patient: " << endl;
     cout << itemOut;
 }
@@ -293,10 +295,10 @@ void menuManager(HashTable<Patient>& h, BinarySearchTree<string>& bst, Stack<Pat
                 addNewPatientsFromFile(h, bst);
                 break;
             case 3:
-                deletePatient(h, trash);
+                deletePatient(h, bst, trash);
                 break;
             case 4:
-                undoDeletePatient(h, trash);
+                undoDeletePatient(h, bst, trash);
                 break;
             case 5:
                 searchWithPatientID(h);
