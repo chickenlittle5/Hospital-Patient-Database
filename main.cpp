@@ -170,7 +170,7 @@ Asks user for patient ID and deletes patient from hash table and adds removed pa
 void deletePatient(HashTable<Patient>& h, BinarySearchTree<string>& bst, Stack<Patient>& trashBin) {
     string deletedPatient;
     cout << "Enter patient to delete: ";
-    cin.ignore(1,'\n');
+    cin.ignore(1, '\n');
     getline(cin, deletedPatient);
     cout << "Deleting a patient..." << endl;
     Patient itemOut;
