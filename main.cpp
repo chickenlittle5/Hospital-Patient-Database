@@ -112,16 +112,15 @@ void addNewPatientManually(HashTable<Patient>& h, BinarySearchTree<string>& bst)
     string patID, patName, patDoB, patAddy, patDiag;
     cout << "Enter Patient ID: \n";
     cin >> patID;
-    cout << "Enter Patient Full Name: \n";
     cin.ignore(1,'\n');
+    cout << "Enter Patient Full Name: \n";
     getline(cin, patName);
     cout << "Enter Patient Date of Birth (MM/DD/YYYY): \n";
     cin >> patDoB;
-    cout << "Enter Patient Address: \n";
     cin.ignore(1,'\n');
+    cout << "Enter Patient Address: \n";
     getline(cin, patAddy);
     cout << "Enter Patient Diagnosis: \n";
-    cin.ignore(1,'\n');
     getline(cin, patDiag);
   
     Patient newPatient = Patient(patID, patName, patAddy, patDoB, patDiag);
@@ -175,7 +174,7 @@ void deletePatient(HashTable<Patient>& h, BinarySearchTree<string>& bst, Stack<P
     getline(cin, deletedPatient);
     cout << "Deleting a patient..." << endl;
     Patient itemOut;
-    itemOut.setName(deletedPatient);
+    itemOut.setID(deletedPatient);
     h.remove(itemOut, itemOut, hashFunction);
     bst.remove(itemOut.getID());
     trashBin.push(itemOut);
