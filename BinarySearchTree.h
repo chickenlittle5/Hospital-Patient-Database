@@ -19,8 +19,8 @@ public:
     bool search(const ItemType &target, ItemType &returnedItem) const;
 
 private:
-  // internal insert node: insert newNode in nodePtr subtree
-  BinaryNode<ItemType>* _insert(BinaryNode<ItemType>* nodePtr, BinaryNode<ItemType>* newNode);
+    // internal insert node: insert newNode in nodePtr subtree
+    BinaryNode<ItemType>* _insert(BinaryNode<ItemType>* nodePtr, BinaryNode<ItemType>* newNode);
 
     BinaryNode<ItemType>* _remove(BinaryNode<ItemType>* nodePtr, const ItemType &target, bool &success);
 
@@ -29,7 +29,7 @@ private:
     BinaryNode<ItemType>* _removeLeftmostNode(BinaryNode<ItemType> *nodePtr, ItemType &inorderSuccessor);
 
     // search for target node
-  BinaryNode<ItemType>* _search(BinaryNode<ItemType>* treePtr, const ItemType &target) const;
+    BinaryNode<ItemType>* _search(BinaryNode<ItemType>* treePtr, const ItemType &target) const;
 };
 
 // Wrapper for _insert - Inserting items within a tree

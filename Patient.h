@@ -45,17 +45,17 @@ public:
     string getCondition() const { return _condition; }
 
     bool operator==(const Patient& other) {
-        return _id == other.getName();
+        return _id == other.getID();
     }
 
-    friend ostream& operator<<(ostream&, Patient& p) {
-        cout << "ID: " << p.getID() << endl;
-        cout << "Name: " << p.getName() << endl;
-        cout << "Address: " << p.getAddress() << endl;
-        cout << "Date of Birth: " << p.getDoB() << endl;
-        cout << "Condition: " << p.getCondition() << endl;
+    friend ostream& operator<<(ostream& os, Patient& p) {
+        os << "ID: " << p.getID() << endl;
+        os << "Name: " << p.getName() << endl;
+        os << "Address: " << p.getAddress() << endl;
+        os << "Date of Birth: " << p.getDoB() << endl;
+        os << "Condition: " << p.getCondition() << endl;
 
-        return cout;
+        return os;
     }
 
     friend int hashFunction(const Patient& key, int hashSize);
