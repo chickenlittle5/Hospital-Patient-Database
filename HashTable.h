@@ -138,7 +138,7 @@ void HashTable<ItemType>::displayAll() const {
 }
 
 /*~*~*~*
-   Rehashes the hash table
+   Rehashes the hash table - Lewis
 *~**/
 template<class ItemType>
 void HashTable<ItemType>::rehash(int h(const ItemType &key, int size)) {
