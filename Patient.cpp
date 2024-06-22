@@ -1,4 +1,7 @@
-
+/*
+ * @author - Ethan Tran
+ * This file includes the hash function that we are using
+ */
 #include "Patient.h"
 
 int hashFunction(const Patient &key, int hashSize) {

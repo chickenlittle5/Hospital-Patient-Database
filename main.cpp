@@ -11,7 +11,7 @@ using namespace std;
 void displayIntro();
 void displayMenu();
 void addNewPatientManually(HashTable<Patient>&, BinarySearchTree<string>&);
-void addNewPatientsFromFile(HashTable<Patient>&, BinarySearchTree<string>&);
+void addNewPatientsFromFile(HashTable<Patient>&, BinarySearchTree<string>&, string&);
 void deletePatient(HashTable<Patient>&, Stack<Patient>&);
 void undoDeletePatient(HashTable<Patient>&, Stack<Patient>&);
 void searchWithPatientID(HashTable<Patient>&);
@@ -20,7 +20,7 @@ void saveAllPatientsToFile(HashTable<Patient>&);
 void showDatabaseStatistics(HashTable<Patient>&);
 void menuManager(HashTable<Patient>&, BinarySearchTree<string>&, Stack<Patient>&);
 
-// Function to check if a number is prime - Lewis
+// Function to check if a number is prime
 bool isPrime(int n) {
     if (n<=1) return false;
 
@@ -34,7 +34,7 @@ bool isPrime(int n) {
     return true;
 }
 
-// Function to find the next prime number greater than n - Lewis
+// Function to find the next prime number greater than n
 int nextPrime(int n) {
     while (!isPrime(n)) {
         n++;
@@ -42,7 +42,7 @@ int nextPrime(int n) {
     return n;
 }
 
-// Function to count lines in the file and determine the hash table size - Lewis
+// Function to count lines in the file and determine the hash table size
 int determineHashSize(const string& filename) {
     ifstream file(filename);
     if(!file.is_open()) {
@@ -56,7 +56,7 @@ int determineHashSize(const string& filename) {
         lines++;
     }
     file.close();
-    
+
     return nextPrime(lines *2);
 }
 
@@ -66,10 +66,13 @@ int determineHashSize(const string& filename) {
 int main() {
     string filename = "test1.txt"; // replace if needed
     int hashSize = determineHashSize(filename);
-    
+
     HashTable<Patient> InfinityCore(hashSize);
     BinarySearchTree<string> InfCore;
     Stack<Patient> Bin;
+
+    addNewPatientsFromFile(InfinityCore, InfCore, filename);
+
     displayIntro();
     menuManager(InfinityCore, InfCore, Bin);
 
@@ -108,7 +111,7 @@ Asks user for patient information and adds it to the hash table and binary searc
 */
 void addNewPatientManually(HashTable<Patient>& h, BinarySearchTree<string>& bst) {
     cout << "Adding a new patient manually:" << endl;
-    
+
     string patID, patName, patDoB, patAddy, patDiag;
     cout << "Enter Patient ID: ";
     cin >> patID;
@@ -122,7 +125,7 @@ void addNewPatientManually(HashTable<Patient>& h, BinarySearchTree<string>& bst)
     getline(cin, patAddy);
     cout << "Enter Patient Diagnosis: ";
     getline(cin, patDiag);
-  
+
     Patient newPatient = Patient(patID, patName, patAddy, patDoB, patDiag);
     if (!bst.insert(newPatient.getID())) {
         cout << "Duplicate ID detected! Invalid ID to insert!" << endl;
@@ -134,16 +137,10 @@ void addNewPatientManually(HashTable<Patient>& h, BinarySearchTree<string>& bst)
 }
 
 /*
-Asks user for file name and adds patients from file to hash table and binary search tree - Lewis
+Asks user for file name and adds patients from file to hash table and binary search tree
 */
-void addNewPatientsFromFile(HashTable<Patient>& h, BinarySearchTree<string>& bst) {
-    string patID, patName, patDoB, patAddy, patDiag;
-    cout << "Adding new patient(s) from input file..." << endl;
-    
-    string filename;
-    cout << "Enter the filename: ";
-    cin >> filename;
-    
+void addNewPatientsFromFile(HashTable<Patient>& h, BinarySearchTree<string>& bst, string& filename) {
+
     ifstream inputFile(filename);
     cout << "Reading data from \"" << filename << "\"" << endl;
     if(!inputFile){
@@ -152,20 +149,21 @@ void addNewPatientsFromFile(HashTable<Patient>& h, BinarySearchTree<string>& bst
     }
     string line;
     while (getline(inputFile, line)){
-      stringstream temp(line);   // create temp with data from line
-      getline(temp, patID, ';');   // stop reading name at ';'
-      temp.ignore();  // to ignore space in front of description
-      getline(temp, patName, ';');  
-      temp.ignore();  
-      getline(temp, patAddy, ';');   
-      temp.ignore();  
-      getline(temp, patDoB, ';');  
-      temp.ignore();  
-      getline(temp, patDiag);
-  
-      Patient newPatient = Patient(patID, patName, patAddy, patDoB, patDiag);
-      bst.insert(newPatient.getID());
-      h.insert(newPatient, hashFunction);
+        string patID, patName, patDoB, patAddy, patDiag;
+        stringstream temp(line);   // create temp with data from line
+        getline(temp, patID, ';');   // stop reading name at ';'
+        temp.ignore();  // to ignore space in front of description
+        getline(temp, patName, ';');  
+        temp.ignore();  
+        getline(temp, patAddy, ';');  
+        temp.ignore();  
+        getline(temp, patDoB, ';');  
+        temp.ignore();  
+        getline(temp, patDiag);
+
+        Patient newPatient = Patient(patID, patName, patAddy, patDoB, patDiag);
+        bst.insert(newPatient.getID());
+        h.insert(newPatient, hashFunction);
     }
 }
 
@@ -221,7 +219,7 @@ void searchWithPatientID(HashTable<Patient>& h) {
     itemOut.setID(patID);
     int numCollisions = h.search(itemOut, itemOut, hashFunction);
     bool found = false;
-    
+
 
     while (patID != "Q" && patID != "q" && !found) {
         itemOut.setID(patID);
@@ -265,7 +263,7 @@ void listAllPatientsSortedByID(BinarySearchTree<string>& bst, HashTable<Patient>
 }
 
 /*
-Saves all patients data into "SavedPatients.txt" file - Lewis
+Saves all patients data into "SavedPatients.txt" file
 */
 void saveAllPatientsToFile(HashTable<Patient>& h) {
     cout << "Saving all existing patients to file..." << endl;
@@ -316,13 +314,17 @@ void menuManager(HashTable<Patient>& h, BinarySearchTree<string>& bst, Stack<Pat
     do {
         cout << "Enter your menu choice (9 for help): ";
         cin >> choice;
+        string filename;
 
         switch (choice) {
             case 1:
                 addNewPatientManually(h, bst);
                 break;
             case 2:
-                addNewPatientsFromFile(h, bst);
+                cout << "Adding new patient(s) from input file..." << endl;
+                cout << "Enter the filename: ";
+                cin >> filename;
+                addNewPatientsFromFile(h, bst, filename);
                 break;
             case 3:
                 deletePatient(h, bst, trash);
