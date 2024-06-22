@@ -15,9 +15,9 @@ void addNewPatientsFromFile(HashTable<Patient>&, BinarySearchTree<string>&);
 void deletePatient(HashTable<Patient>&, Stack<Patient>&);
 void undoDeletePatient(HashTable<Patient>&, Stack<Patient>&);
 void searchWithPatientID(HashTable<Patient>&);
-void listAllPatientsSortedByID();
+void listAllPatientsSortedByID(BinarySearchTree<string>&, HashTable<Patient>&);
 void saveAllPatientsToFile(HashTable<Patient>&);
-void showDatabaseStatistics();
+void showDatabaseStatistics(HashTable<Patient>&);
 void menuManager(HashTable<Patient>&, BinarySearchTree<string>&, Stack<Patient>&);
 
 // Function to check if a number is prime
@@ -110,17 +110,17 @@ void addNewPatientManually(HashTable<Patient>& h, BinarySearchTree<string>& bst)
     cout << "Adding a new patient manually:" << endl;
     
     string patID, patName, patDoB, patAddy, patDiag;
-    cout << "Enter Patient ID: \n";
+    cout << "Enter Patient ID: ";
     cin >> patID;
     cin.ignore(1,'\n');
-    cout << "Enter Patient Full Name: \n";
+    cout << "Enter Patient Full Name: ";
     getline(cin, patName);
-    cout << "Enter Patient Date of Birth (MM/DD/YYYY): \n";
+    cout << "Enter Patient Date of Birth (MM/DD/YYYY): ";
     cin >> patDoB;
     cin.ignore(1,'\n');
-    cout << "Enter Patient Address: \n";
+    cout << "Enter Patient Address: ";
     getline(cin, patAddy);
-    cout << "Enter Patient Diagnosis: \n";
+    cout << "Enter Patient Diagnosis: ";
     getline(cin, patDiag);
   
     Patient newPatient = Patient(patID, patName, patAddy, patDoB, patDiag);
@@ -152,7 +152,7 @@ void addNewPatientsFromFile(HashTable<Patient>& h, BinarySearchTree<string>& bst
       temp.ignore();  // to ignore space in front of description
       getline(temp, patName, ';');  
       temp.ignore();  
-      getline(temp, patAddy, ';');  
+      getline(temp, patAddy, ';');   
       temp.ignore();  
       getline(temp, patDoB, ';');  
       temp.ignore();  
@@ -184,30 +184,53 @@ void deletePatient(HashTable<Patient>& h, BinarySearchTree<string>& bst, Stack<P
 Pops from trash bin stack and inserts back into hash table, popped Patient attributes are then printed using an overloaded stream operator 
 */
 void undoDeletePatient(HashTable<Patient>& h, BinarySearchTree<string>& bst, Stack<Patient>& trashBin) {
-    cout << "Undoing delete patient..." << endl;
-    // Add your code here
-    Patient itemOut;
-    itemOut = trashBin.pop();
-    h.insert(itemOut, hashFunction);
-    bst.insert(itemOut.getID());
-    cout << "Undo-ed patient: " << endl;
-    cout << itemOut;
+
+    if (trashBin.isEmpty()) {
+        cout << "Nothing to undo!" << endl;
+    } else {
+        cout << "Undoing delete patient..." << endl;
+        // Add your code here
+        Patient itemOut;
+        itemOut = trashBin.pop();
+        h.insert(itemOut, hashFunction);
+        bst.insert(itemOut.getID());
+        cout << "Undo-ed patient: " << endl;
+        cout << itemOut;
+    }
 }
 
 /*
 Asks user for patient ID and searches for patient in hash table and prints patient information if found
 */
 void searchWithPatientID(HashTable<Patient>& h) {
+
+    if (h.isEmpty()) {
+        cout << "No patients available to search." << endl;
+        return;
+    }
     cout << "Searching with patient ID..." << endl;
-    cout << "Enter the patient ID: " << endl;
+    cout << "Enter the patient ID [Q to quit]: ";
     string patID;
     cin >> patID;
-    // Add your code here
     Patient itemOut;
-    int numOfCollisions;
     itemOut.setID(patID);
-    numOfCollisions = h.search(itemOut, itemOut, hashFunction);
-    cout << itemOut;
+    int numCollisions = h.search(itemOut, itemOut, hashFunction);
+    bool found = false;
+    
+
+    while (patID != "Q" && patID != "q" && !found) {
+        itemOut.setID(patID);
+        numCollisions = h.search(itemOut, itemOut, hashFunction);
+
+        if (numCollisions != -1) {
+            cout << "Patient found." << endl;
+            cout << itemOut << endl;
+            found = true;
+        } else {
+            cout << "Patient ID: \"" << patID << "\" not found. \nPlease enter a valid patient ID [Q to quit]: ";
+            cin >> patID;
+        }
+    }
 }
 
 void inorderTraversal(BinaryNode<string>* nodePtr, HashTable<Patient>& h) {
@@ -276,6 +299,7 @@ void showDatabaseStatistics(HashTable<Patient>& h) {
 }
 
 void printIndentedTree(const string &item, int level) {
+    cout << endl;
     for (int i = 1; i < level; i++)
         cout << "..";
     cout << level << "). " << item << endl;
@@ -285,7 +309,7 @@ void menuManager(HashTable<Patient>& h, BinarySearchTree<string>& bst, Stack<Pat
     int choice;
     displayMenu();
     do {
-        cout << "Enter your choice: ";
+        cout << "Enter your menu choice (9 for help): ";
         cin >> choice;
 
         switch (choice) {
