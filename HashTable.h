@@ -1,5 +1,9 @@
 /*
  * @author - Ethan Tran
+ * This file contains the HashTable which will be the main data
+ * structure that will store every patient. This will be our patient
+ * database and includes all the functions necessary insert, remove
+ * and search for a patient.
  */
 
 #ifndef HASHTABLE_H_
