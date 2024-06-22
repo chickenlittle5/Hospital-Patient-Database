@@ -1,3 +1,9 @@
+/*
+ * @author - Ethan Tran
+ *
+ * 
+ */
+
 
 #ifndef PATIENT_H
 #define PATIENT_H

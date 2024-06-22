@@ -127,8 +127,13 @@ void addNewPatientManually(HashTable<Patient>& h, BinarySearchTree<string>& bst)
     getline(cin, patDiag);
 
     Patient newPatient = Patient(patID, patName, patAddy, patDoB, patDiag);
-    h.insert(newPatient, hashFunction);
-    bst.insert(newPatient.getID());
+    if (!bst.insert(newPatient.getID())) {
+        cout << "Duplicate ID detected! Invalid ID to insert!" << endl;
+    }
+    else {
+        h.insert(newPatient, hashFunction);
+    }
+
 }
 
 /*

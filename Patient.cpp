@@ -1,3 +1,4 @@
+
 #include "Patient.h"
 
 int hashFunction(const Patient &key, int hashSize) {

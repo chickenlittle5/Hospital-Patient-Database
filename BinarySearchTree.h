@@ -36,12 +36,17 @@ private:
 template<class ItemType>
 bool BinarySearchTree<ItemType>::insert(const ItemType & newEntry)
 {
-  BinaryNode<ItemType>* newNodePtr = new BinaryNode<ItemType>(newEntry);
 
-  this->rootPtr = _insert(this->rootPtr, newNodePtr);
-  this->count++;
+    ItemType temp;
+    if (search(newEntry, temp)) {
+        return false;
+    }
 
-  return true;
+    BinaryNode<ItemType>* newNodePtr = new BinaryNode<ItemType>(newEntry);
+    this->rootPtr = _insert(this->rootPtr, newNodePtr);
+    this->count++;
+    return true;
+  
 }  
 
 template<class ItemType>
@@ -86,7 +91,7 @@ BinaryNode<ItemType>* BinarySearchTree<ItemType>::_insert(BinaryNode<ItemType>* 
     }
     else {
         delete newNodePtr;
-        newNodePtr = nullptr;
+        return nullptr;
     }
 
     return nodePtr;
