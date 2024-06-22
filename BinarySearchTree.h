@@ -70,25 +70,23 @@ bool BinarySearchTree<ItemType>::search(const ItemType& anEntry, ItemType & retu
     return false;
 }
 
-// Iterative implementation of the insert operation
+// Recursive implementation of the insert operation
 template<class ItemType>
 BinaryNode<ItemType>* BinarySearchTree<ItemType>::_insert(BinaryNode<ItemType>* nodePtr, BinaryNode<ItemType>* newNodePtr)
 { 
-    if(!nodePtr) // == NULL
-    {
+    if(!nodePtr) {
         nodePtr = newNodePtr;
         return nodePtr;
     }
-    else
-    {
-        if (newNodePtr->getItem() < nodePtr->getItem())
-        {
-            nodePtr->setLeftPtr(_insert(nodePtr->getLeftPtr(), newNodePtr));
-        }
-        else
-        {
-            nodePtr->setRightPtr(_insert(nodePtr->getRightPtr(), newNodePtr));
-        }
+    else if (newNodePtr->getItem() < nodePtr->getItem()) {
+        nodePtr->setLeftPtr(_insert(nodePtr->getLeftPtr(), newNodePtr));
+    }
+    else if (newNodePtr->getItem() > nodePtr->getItem()) {
+        nodePtr->setRightPtr(_insert(nodePtr->getRightPtr(), newNodePtr));
+    }
+    else {
+        delete newNodePtr;
+        newNodePtr = nullptr;
     }
 
     return nodePtr;
