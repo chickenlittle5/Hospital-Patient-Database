@@ -1,5 +1,6 @@
 /*
  * @author - Benjamin Tonthat
+ * This file is used to print or search within the binary tree of IDs
  */
 
 #ifndef _BINARY_TREE

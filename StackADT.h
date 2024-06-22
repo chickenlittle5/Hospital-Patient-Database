@@ -1,8 +1,8 @@
 /* 
- * @author - Ethan Tran
- * This file includes the stack that we will be using to trash the 
- * patients when they are to be removed. 
- */
+Written by:
+Ethan Tran
+   Stack template
+*/
 using namespace std;
 
 #ifndef STACK_ADT

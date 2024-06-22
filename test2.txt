@@ -1,5 +1,5 @@
-AAAA0079; Jennifer Turner; 7890 Maple Street; 02/14/2001; Fibromyalgia     // same ASCII sum value as A1B2C3D4
-K9L0M1N2; Daniel Wright; 3215 Oak Court; 05/25/1996; Parkinson's Disease
-O3P4Q5R6; Sarah Thompson; 5678 Birch Road; 09/11/1999; Rheumatoid Arthritis
-S7T8U9V0; Michael Young; 2347 Pine Street; 12/30/2002; Cystic Fibrosis
-W1X2Y3Z4; Emily Johnson; 7891 Willow Way; 07/19/2000; Huntington's Disease
+L26HGKTV; Brian Anderson; 5222 Aiderman Drive; 01/22/1006; Hemorrhage
+QBNVGHJ7; Amy Golding; 9893 Chin Circle; 06/11/2013; Sclerosis
+DRRB78D2; Livia Neils; 1238 Nolia Street; 10/05/1987; Lyme Disease
+MQWY567X; Xavier Carter; 9868 Blaney Drive; 03/20/2005; ALS
+JCFHI789; Lizzy Que; 2139 Egypt Road; 01/20/1902; Chronic Heart Disease

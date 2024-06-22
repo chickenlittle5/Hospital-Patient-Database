@@ -20,7 +20,7 @@ void saveAllPatientsToFile(HashTable<Patient>&);
 void showDatabaseStatistics(HashTable<Patient>&);
 void menuManager(HashTable<Patient>&, BinarySearchTree<string>&, Stack<Patient>&);
 
-// Function to check if a number is prime
+// Function to check if a number is prime - Lewis
 bool isPrime(int n) {
     if (n<=1) return false;
 
@@ -34,7 +34,7 @@ bool isPrime(int n) {
     return true;
 }
 
-// Function to find the next prime number greater than n
+// Function to find the next prime number greater than n - Lewis
 int nextPrime(int n) {
     while (!isPrime(n)) {
         n++;
@@ -42,7 +42,7 @@ int nextPrime(int n) {
     return n;
 }
 
-// Function to count lines in the file and determine the hash table size
+// Function to count lines in the file and determine the hash table size - Lewis
 int determineHashSize(const string& filename) {
     ifstream file(filename);
     if(!file.is_open()) {
@@ -82,7 +82,7 @@ int main() {
 
 
 
-
+// Function to display the introduction message - Ryan
 void displayIntro() {
     cout << "=======================================================================" << endl;
     cout << "Welcome to the In-Patient Hospital Database System!" << endl;
@@ -91,6 +91,7 @@ void displayIntro() {
          << "to prevent confusion and inefficiency in crucial times. In other times " << endl
          << "just for the convenience and quick to find patients without much effort."<< endl;
 }
+// Function to display the menu - Ryan
 void displayMenu() {
     cout << "=========== MENU ===========" << endl;
     cout << "[1] - add new patient manually" << endl;
@@ -107,7 +108,7 @@ void displayMenu() {
     cout << endl;
 }
 /*
-Asks user for patient information and adds it to the hash table and binary search tree
+Asks user for patient information and adds it to the hash table and binary search tree - Ethan
 */
 void addNewPatientManually(HashTable<Patient>& h, BinarySearchTree<string>& bst) {
     cout << "Adding a new patient manually:" << endl;
@@ -137,7 +138,7 @@ void addNewPatientManually(HashTable<Patient>& h, BinarySearchTree<string>& bst)
 }
 
 /*
-Asks user for file name and adds patients from file to hash table and binary search tree
+Asks user for file name and adds patients from file to hash table and binary search tree - Lewis
 */
 void addNewPatientsFromFile(HashTable<Patient>& h, BinarySearchTree<string>& bst, string& filename) {
 
@@ -184,7 +185,7 @@ void deletePatient(HashTable<Patient>& h, BinarySearchTree<string>& bst, Stack<P
 }
 
 /*
-Pops from trash bin stack and inserts back into hash table, popped Patient attributes are then printed using an overloaded stream operator 
+Pops from trash bin stack and inserts back into hash table, popped Patient attributes are then printed using an overloaded stream operator - Ethan
 */
 void undoDeletePatient(HashTable<Patient>& h, BinarySearchTree<string>& bst, Stack<Patient>& trashBin) {
 
@@ -192,7 +193,6 @@ void undoDeletePatient(HashTable<Patient>& h, BinarySearchTree<string>& bst, Sta
         cout << "Nothing to undo!" << endl;
     } else {
         cout << "Undoing delete patient..." << endl;
-        // Add your code here
         Patient itemOut;
         itemOut = trashBin.pop();
         h.insert(itemOut, hashFunction);
@@ -203,7 +203,7 @@ void undoDeletePatient(HashTable<Patient>& h, BinarySearchTree<string>& bst, Sta
 }
 
 /*
-Asks user for patient ID and searches for patient in hash table and prints patient information if found
+Asks user for patient ID and searches for patient in hash table and prints patient information if found - Benjamin
 */
 void searchWithPatientID(HashTable<Patient>& h) {
 
@@ -236,6 +236,9 @@ void searchWithPatientID(HashTable<Patient>& h) {
     }
 }
 
+/*
+Prints all patients sorted order by ID using the binary search tree - Ethan
+*/
 void inorderTraversal(BinaryNode<string>* nodePtr, HashTable<Patient>& h) {
     if (nodePtr != nullptr) {
         // Traverse the left subtree
@@ -255,19 +258,20 @@ void inorderTraversal(BinaryNode<string>* nodePtr, HashTable<Patient>& h) {
     }
 }
 
+/*
+Wrapper function to inorderTraversal() - Ethan
+*/
 void listAllPatientsSortedByID(BinarySearchTree<string>& bst, HashTable<Patient>& h) {
     cout << "Listing all patients sorted by ID..." << endl;
-    // Add your code here
     //while the left->next is null
     inorderTraversal(bst.getRoot(), h);
 }
 
 /*
-Saves all patients data into "SavedPatients.txt" file
+Saves all patients data into "SavedPatients.txt" file - Lewis
 */
 void saveAllPatientsToFile(HashTable<Patient>& h) {
     cout << "Saving all existing patients to file..." << endl;
-    // Add your code here
     ofstream newFile;
     newFile.open("SavedPatients.txt");
     if(newFile.is_open()){
@@ -287,7 +291,9 @@ void saveAllPatientsToFile(HashTable<Patient>& h) {
         cout << "Unable to open file" << endl;
     }
 }
-
+/*
+Shows statistical information about the database - Omar
+*/
 void showDatabaseStatistics(HashTable<Patient>& h) {
     cout << "Showing database statistics..." << endl;
     // Add your code here
@@ -300,14 +306,18 @@ void showDatabaseStatistics(HashTable<Patient>& h) {
         }
     }
 }
-
+/*
+Prints indented tree - Benjamin
+*/
 void printIndentedTree(const string &item, int level) {
     cout << endl;
     for (int i = 1; i < level; i++)
         cout << "..";
     cout << level << "). " << item << endl;
 }
-
+/*
+User picks which function to call based on menu option - Ryan/Omar
+*/
 void menuManager(HashTable<Patient>& h, BinarySearchTree<string>& bst, Stack<Patient>& trash) {
     int choice;
     displayMenu();

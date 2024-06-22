@@ -1,6 +1,8 @@
 /*
  * @author - Ethan Tran
- * This file
+ * This file contains the nodes in the HashTable
+ * It contains the private variables and the getters
+ * and setters that we will use later on.
  */
 
 #ifndef _HASH_NODE

@@ -1,5 +1,7 @@
 /*
  * @author - Benjamin Tonthat
+ * This file removes or inserts Patient IDs into the
+ * binary tree. Here is also where you find the Patients' IDs.
  */
 
 #ifndef _BINARY_SEARCH_TREE
@@ -46,7 +48,7 @@ bool BinarySearchTree<ItemType>::insert(const ItemType & newEntry)
     this->rootPtr = _insert(this->rootPtr, newNodePtr);
     this->count++;
     return true;
-  
+
 }  
 
 template<class ItemType>

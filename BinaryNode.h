@@ -1,5 +1,6 @@
 /*
  * @author - Benjamin Tonthat
+ * This file contains the initializing of the nodes in the tree.
  */
 
 #ifndef _BINARY_NODE
