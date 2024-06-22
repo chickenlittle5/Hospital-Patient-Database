@@ -20,7 +20,7 @@ void saveAllPatientsToFile(HashTable<Patient>&);
 void showDatabaseStatistics(HashTable<Patient>&);
 void menuManager(HashTable<Patient>&, BinarySearchTree<string>&, Stack<Patient>&);
 
-// Function to check if a number is prime
+// Function to check if a number is prime - Lewis
 bool isPrime(int n) {
     if (n<=1) return false;
 
@@ -34,7 +34,7 @@ bool isPrime(int n) {
     return true;
 }
 
-// Function to find the next prime number greater than n
+// Function to find the next prime number greater than n - Lewis
 int nextPrime(int n) {
     while (!isPrime(n)) {
         n++;
@@ -42,7 +42,7 @@ int nextPrime(int n) {
     return n;
 }
 
-// Function to count lines in the file and determine the hash table size
+// Function to count lines in the file and determine the hash table size - Lewis
 int determineHashSize(const string& filename) {
     ifstream file(filename);
     if(!file.is_open()) {
@@ -129,7 +129,7 @@ void addNewPatientManually(HashTable<Patient>& h, BinarySearchTree<string>& bst)
 }
 
 /*
-Asks user for file name and adds patients from file to hash table and binary search tree
+Asks user for file name and adds patients from file to hash table and binary search tree - Lewis
 */
 void addNewPatientsFromFile(HashTable<Patient>& h, BinarySearchTree<string>& bst) {
     string patID, patName, patDoB, patAddy, patDiag;
@@ -260,7 +260,7 @@ void listAllPatientsSortedByID(BinarySearchTree<string>& bst, HashTable<Patient>
 }
 
 /*
-Saves all patients data into "SavedPatients.txt" file
+Saves all patients data into "SavedPatients.txt" file - Lewis
 */
 void saveAllPatientsToFile(HashTable<Patient>& h) {
     cout << "Saving all existing patients to file..." << endl;
